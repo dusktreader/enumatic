@@ -1,6 +1,6 @@
 [project]
-name = "auto-name-enum"
-version = "4.2.0"
+name = "enumatic"
+version = "5.0.0"
 description = "String-based Enum class that automatically assigns values"
 authors = [
     {name = "Tucker Beck", email ="tucker.beck@gmail.com"},
@@ -10,9 +10,10 @@ license-files = ["LICENSE.md"]
 
 requires-python = ">=3.10"
 dependencies = [
+    "deprecated>=1.2.18",
     "typing-extensions>=4.13.2 ; python_full_version < '3.12'",
 ]
-keywords = ["enum", "auto", "name", "string"]
+keywords = ["enum", "auto", "string", "enumatic"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
@@ -27,10 +28,10 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/dusktreader/auto-name-enum"
-Repository = "https://github.com/dusktreader/auto-name-enum"
-Changelog = "https://github.com/dusktreader/auto-name-enum/blob/main/CHANGELOG.md"
-Issues = "https://github.com/dusktreader/auto-name-enum/issues"
+Homepage = "https://github.com/dusktreader/enumatic"
+Repository = "https://github.com/dusktreader/enumatic"
+Changelog = "https://github.com/dusktreader/enumatic/blob/main/CHANGELOG.md"
+Issues = "https://github.com/dusktreader/enumatic/issues"
 
 [dependency-groups]
 dev = [
@@ -46,9 +47,12 @@ dev = [
 [tool.uv]
 package = true
 
+[tool.uv.build-backend]
+module-name = ["enumatic", "auto_name_enum"]
+
 [tool.pytest.ini_options]
 addopts = [
-    "--cov=src/auto_name_enum",
+    "--cov=src/enumatic",
     "--cov-report=term-missing",
     "--cov-fail-under=85",
     "--cov-report=xml:.coverage.xml",
@@ -58,7 +62,7 @@ addopts = [
 
 [tool.ruff]
 line-length = 120
-src = ["src/auto_name_enum", "tests"]
+src = ["src/enumatic", "tests"]
 
 [tool.ty.src]
 include = ["src", "tests"]

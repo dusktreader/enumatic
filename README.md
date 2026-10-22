@@ -1,125 +1,164 @@
-# A utility for producing enums with automatic names
+# Enumatic
 
-This package provides an extension of python Enum objects that automatically
-assigns values to members. This uses the `auto()` feature to assign text values
-to the enums instead of having to manually set them.
+Enumatic provides string-valued Python enums that automatically assign each member's value from its name.
+
+> **Project rename:** `auto-name-enum` is now `enumatic`, and `AutoNameEnum` is now `Enumatic`. This is a major release.
+> Install `enumatic` and change imports to `from enumatic import Enumatic, auto`. Existing `from auto_name_enum import
+> AutoNameEnum` imports remain available through a compatibility
+> package, but new code should use `enumatic` and `Enumatic`.
+
+
+## Why Enumatic instead of `StrEnum`
+
+First of all, back when `enumatic` was named `auto-name-enum` and was first released, Python didn't have a `StrEnum`
+type that offered builtin `auto()` functionality. So, `AutoNameEnum` (as `Enumatic`
+used to be called) provided the boilerplate to enable `auto()`.
+
+After Python 3.11, the standard library `StrEnum` provides a lot of the same functionality as `Enumatic`.
+However, there are still some nice things that `Enumatic` provides beyond `StrEnum`.
+
+For example, `Enumatic` preserves the case of your values by defualt, and offers a few helper functions that control how
+casing is applied to the values. It also offers the `pretty_list()` helper which nicely formats the list of values as
+well as the `rando()` method that randomly chooses one of the values. Finally, `Enumatic`
+provides the `autodoc()` helper to provide context to the values automatically.
+
+
+## Installation
+
+Install the renamed package from PyPI:
+
+```shell
+pip install enumatic
+```
 
 
 ## Specifying your enum
-For example, you might create an enum with this like so:
 
-```
-class Aliens(AutoNameEnum):
+Import `Enumatic` and its helpers, then define an enum:
+
+```python
+from enumatic import Enumatic, auto
+
+
+class Species(Enumatic):
     JAWA = auto()
     EWOK = auto()
     HUTT = auto()
     PYKE = auto()
 ```
 
+
 ## Getting values
 
-Using the class, verify the value of `JAWA` would be 'JAWA':
+`auto()` assigns each value from its member name:
 
-```
->>> print(Aliens.JAWA.value)
+```python
+>>> print(Species.JAWA.value)
 'JAWA'
 ```
 
-You may also get the same value by just using the name of the item:
+The enum member also behaves like its string value:
 
-```
->>> print(Aliens.JAWA)
+```python
+>>> print(Species.JAWA)
 'JAWA'
 ```
+
 
 ## Iterating
 
 Python enums may be iterated over:
 
-```
-for alien in Aliens:
-    print(f"name: {alien.name}, value: {alien.value}")
+```python
+for species in Species:
+    print(f"name: {species.name}, value: {species.value}")
 ```
 
-For more information on enums (and the auto method), see [the official docs]
-(https://docs.python.org/3/library/enum.html)
+For more information on enums and `auto()`, see the [official Python
+documentation](https://docs.python.org/3/library/enum.html).
 
 
 ## Mixins
 
-There are two mixins provided that change the case of member values for both `auto()` and `autodoc()`:
+Three mixins change the case of member values for both `auto()` and `autodoc()`:
 
 - `LowerCaseMixin`: values are in all lower-case
 - `TitleCaseMixin`: values are in title-case (lower-case except for first letter)
 - `KebabCaseMixin`: values are in kebab-case (dashes instead of underscores)
 
-When these mixins are used, they _must_ be included after `AutoNameEnum` in the class inheritance declaration:
+Include a mixin after `Enumatic` in the class inheritance declaration:
 
 ```python
-class Aliens(AutoNameEnum, TitleCaseMixin)
+class Species(Enumatic, TitleCaseMixin):
     JAWA = auto()
     EWOK = auto()
     HUTT = auto()
     PYKE = auto()
 ```
 
+Then, you can check how the values are changed:
+
+```python
+>>> print(Species.JAWA)
+'Jawa'
+```
+
 
 ## Documented members with `autodoc()`
 
-The `autodoc()` function works like `auto()`, but also attaches a `description` and/or
-`display_name` to each enum member. This is useful for self-documenting enums where members
-need human-readable explanations or labels:
+The `autodoc()` function works like `auto()`, but also attaches a `description` and/or `display_name` to each enum
+member. This is useful for self-documenting enums where members need human-readable explanations or labels:
 
 ```python
-class Aliens(AutoNameEnum):
-    JAWA = autodoc("A small, rodent-like alien from Tatooine")
-    EWOK = autodoc("A furry, diminutive alien from the forest moon of Endor")
-    HUTT = autodoc("A large, slug-like alien from Nal Hutta")
-    PYKE = autodoc("A secretive, spice-dealing alien from Oba Diah")
+class Species(Enumatic):
+    JAWA = autodoc("A small, rodent-like species from Tatooine")
+    EWOK = autodoc("A furry, diminutive species from the forest moon of Endor")
+    HUTT = autodoc("A large, slug-like species from Nal Hutta")
+    PYKE = autodoc("A secretive, spice-dealing species from Oba Diah")
 ```
 
-The value works just like `auto()`:
+`autodoc()` assigns the value just like `auto()`:
 
-```
->>> print(Aliens.JAWA.value)
+```python
+>>> print(Species.JAWA.value)
 'JAWA'
 ```
 
 Access the description via the `.description` property:
 
-```
->>> print(Aliens.JAWA.description)
-'A small, rodent-like alien from Tatooine'
+```python
+>>> print(Species.JAWA.description)
+'A small, rodent-like species from Tatooine'
 ```
 
 A `display_name` can also be attached as a keyword argument:
 
 ```python
-class Aliens(AutoNameEnum):
-    JAWA = autodoc(description="A small, rodent-like alien from Tatooine", display_name="Jawa (Tatooine)")
-    EWOK = autodoc(description="A furry, diminutive alien from the forest moon of Endor", display_name="Ewok (Endor)")
+class Species(Enumatic):
+    JAWA = autodoc(description="A small, rodent-like species from Tatooine", display_name="Jawa (Tatooine)")
+    EWOK = autodoc(description="A furry, diminutive species from the forest moon of Endor", display_name="Ewok (Endor)")
 ```
 
-```
->>> print(Aliens.JAWA.display_name)
+```python
+>>> print(Species.JAWA.display_name)
 'Jawa (Tatooine)'
 ```
 
-You can mix `auto()` and `autodoc()` in the same enum. Members created with `auto()` will return
-`None` for `.description` and their value for `.display_name`:
+You can mix `auto()` and `autodoc()` in the same enum. Members created with `auto()`
+will return `None` for `.description` and their value for `.display_name`:
 
 ```python
-class Aliens(AutoNameEnum):
-    JAWA = autodoc("A small, rodent-like alien from Tatooine")
+class Species(Enumatic):
+    JAWA = autodoc("A small, rodent-like species from Tatooine")
     EWOK = auto()
-    HUTT = autodoc("A large, slug-like alien from Nal Hutta")
+    HUTT = autodoc("A large, slug-like species from Nal Hutta")
 ```
 
-```
->>> print(Aliens.JAWA.description)
-'A small, rodent-like alien from Tatooine'
->>> print(Aliens.EWOK.description)
+```python
+>>> print(Species.JAWA.description)
+'A small, rodent-like species from Tatooine'
+>>> print(Species.EWOK.description)
 None
->>> print(Aliens.EWOK.display_name)
+>>> print(Species.EWOK.display_name)
 'EWOK'
 ```

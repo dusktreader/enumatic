@@ -3,16 +3,56 @@ from collections import Counter
 
 import pytest
 
-from auto_name_enum import AutoNameEnum, auto, autodoc
+import enumatic
+from enumatic import Enumatic, auto, autodoc
 
 
-class DummyEnum(AutoNameEnum):
+class DummyEnum(Enumatic):
     JAWA = auto()
     EWOK = auto()
     HUTT = auto()
 
 
-class TestAutoNameEnum:
+class TestEnumatic:
+    def test_legacy_class_alias_warns(self):
+        with pytest.warns(DeprecationWarning, match="auto_name_enum was renamed to enumatic; use enumatic instead"):
+            legacy_class = enumatic.AutoNameEnum
+        assert legacy_class is Enumatic
+
+    def test_legacy_package_import_warns(self, monkeypatch):
+        self.clear_legacy_modules(monkeypatch)
+        imported = {}
+        with pytest.warns(DeprecationWarning, match="auto_name_enum was renamed to enumatic; use enumatic instead"):
+            exec("from auto_name_enum import AutoNameEnum, Enumatic, auto", imported)
+
+        assert imported["AutoNameEnum"] is Enumatic
+        assert imported["Enumatic"] is Enumatic
+        assert imported["auto"] is auto
+
+    def test_legacy_base_import_warns(self, monkeypatch):
+        self.clear_legacy_modules(monkeypatch)
+        imported = {}
+        with pytest.warns(DeprecationWarning, match="auto_name_enum was renamed to enumatic; use enumatic instead"):
+            exec("from auto_name_enum.base import AutoNameEnum, Enumatic, auto", imported)
+
+        assert imported["AutoNameEnum"] is Enumatic
+        assert imported["Enumatic"] is Enumatic
+        assert imported["auto"] is auto
+
+    def test_legacy_mixins_import_warns(self, monkeypatch):
+        self.clear_legacy_modules(monkeypatch)
+        imported = {}
+        with pytest.warns(DeprecationWarning, match="auto_name_enum was renamed to enumatic; use enumatic instead"):
+            exec("from auto_name_enum.mixins import KebabCaseMixin", imported)
+
+        assert imported["KebabCaseMixin"].__module__ == "enumatic.mixins"
+
+    @staticmethod
+    def clear_legacy_modules(monkeypatch):
+        for module_name in tuple(sys.modules):
+            if module_name == "auto_name_enum" or module_name.startswith("auto_name_enum."):
+                monkeypatch.delitem(sys.modules, module_name, raising=False)
+
     def test_auto(self):
         """
         This test verifies that the values of the items from the enum are
@@ -86,21 +126,21 @@ class TestAutoNameEnum:
             assert 1 not in DummyEnum
 
 
-class PositionalDescriptionEnum(AutoNameEnum):
+class PositionalDescriptionEnum(Enumatic):
     JAWA = autodoc("A small, rodent-like alien from Tatooine")
     EWOK = autodoc("A furry, diminutive alien from the forest moon of Endor")
     HUTT = autodoc("A large, slug-like alien from Nal Hutta")
     PYKE = autodoc("A secretive, spice-dealing alien from Oba Diah")
 
 
-class KwargDocsEnum(AutoNameEnum):
+class KwargDocsEnum(Enumatic):
     JAWA = autodoc(description="A small, rodent-like alien from Tatooine", display_name="Jawa (Tatooine)")
     EWOK = autodoc(description="A furry, diminutive alien from the forest moon of Endor", display_name="Ewok (Endor)")
     HUTT = autodoc(description="A large, slug-like alien from Nal Hutta", display_name="Hutt (Nal Hutta)")
     PYKE = autodoc(description="A secretive, spice-dealing alien from Oba Diah", display_name="Pyke (Oba Diah)")
 
 
-class MixedEnum(AutoNameEnum):
+class MixedEnum(Enumatic):
     JAWA = autodoc("A small, rodent-like alien from Tatooine")
     EWOK = auto()
     HUTT = autodoc(description="A large, slug-like alien from Nal Hutta")

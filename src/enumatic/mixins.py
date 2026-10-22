@@ -1,0 +1,77 @@
+import enum
+import sys
+from typing import Any
+
+if sys.version_info < (3, 12):
+    from typing_extensions import override
+else:
+    from typing import override
+
+
+class LowerCaseMixin(enum.Enum):
+    """
+    This mixin can be used to make values lower case.
+
+    Example:
+        class Aliens(Enumatic, LowerCaseMixin):
+            JAWA = auto()
+            EWOK = auto()
+
+        >> print(Aliens.JAWA)
+        'jawa'
+
+    Note:
+        Inheritance order is important! This must *follow* Enumatic in the
+        list of subclasses
+    """
+
+    @override
+    @staticmethod
+    def _generate_next_value_(name: str, *_: Any, **__: Any) -> str:
+        return name.lower()
+
+
+class TitleCaseMixin(enum.Enum):
+    """
+    This mixin can be used to make values title case.
+
+    Example:
+        class Aliens(Enumatic, TitleCaseMixin):
+            JAWA = auto()
+            EWOK = auto()
+
+        >> print(Aliens.JAWA)
+        'Jawa'
+
+    Note:
+        Inheritance order is important! This must *follow* Enumatic in the
+        list of subclasses
+    """
+
+    @override
+    @staticmethod
+    def _generate_next_value_(name: str, *_: Any, **__: Any) -> str:
+        return name[0].upper() + name[1:].lower()
+
+
+class KebabCaseMixin(enum.Enum):
+    """
+    This mixin can be used to convert values to kebab-case from snake_case.
+
+    Example:
+        class Aliens(Enumatic, TitleCaseMixin):
+            esh_kha = auto()
+            gu_vandi = auto()
+
+        >> print(Aliens.esh_kha)
+        'esh-kha'
+
+    Note:
+        Inheritance order is important! This must *follow* Enumatic in the
+        list of subclasses
+    """
+
+    @override
+    @staticmethod
+    def _generate_next_value_(name: str, *_: Any, **__: Any) -> str:
+        return name.replace("_", "-")
