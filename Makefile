@@ -1,4 +1,4 @@
-PACKAGE_TARGET:=src/auto_name_enum
+PACKAGE_TARGET:=src/enumatic
 
 default: help
 

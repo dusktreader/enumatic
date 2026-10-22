@@ -1,13 +1,20 @@
-from auto_name_enum import AutoNameEnum, auto, autodoc, LowerCaseMixin, TitleCaseMixin, KebabCaseMixin
+from enumatic import (
+    Enumatic,
+    KebabCaseMixin,
+    LowerCaseMixin,
+    TitleCaseMixin,
+    auto,
+    autodoc,
+)
 
 
-class LowerEnum(AutoNameEnum, LowerCaseMixin):
+class LowerEnum(Enumatic, LowerCaseMixin):
     JAWA = auto()
     EWOK = auto()
     HUTT = auto()
 
 
-class LowerAutoDocEnum(AutoNameEnum, LowerCaseMixin):
+class LowerAutoDocEnum(Enumatic, LowerCaseMixin):
     JAWA = autodoc(description="A small, rodent-like alien from Tatooine", display_name="Jawa (Tatooine)")
     EWOK = autodoc(description="A furry, diminutive alien from the forest moon of Endor", display_name="Ewok (Endor)")
     HUTT = autodoc(description="A large, slug-like alien from Nal Hutta", display_name="Hutt (Nal Hutta)")
@@ -31,13 +38,13 @@ class TestLowerCaseMixin:
         assert LowerAutoDocEnum.HUTT.display_name == "Hutt (Nal Hutta)"
 
 
-class TitleEnum(AutoNameEnum, TitleCaseMixin):
+class TitleEnum(Enumatic, TitleCaseMixin):
     JAWA = auto()
     EWOK = auto()
     HUTT = auto()
 
 
-class TitleAutoDocEnum(AutoNameEnum, TitleCaseMixin):
+class TitleAutoDocEnum(Enumatic, TitleCaseMixin):
     JAWA = autodoc(description="A small, rodent-like alien from Tatooine", display_name="Jawa (Tatooine)")
     EWOK = autodoc(description="A furry, diminutive alien from the forest moon of Endor", display_name="Ewok (Endor)")
     HUTT = autodoc(description="A large, slug-like alien from Nal Hutta", display_name="Hutt (Nal Hutta)")
@@ -61,13 +68,13 @@ class TestTitleCaseMixin:
         assert TitleAutoDocEnum.HUTT.display_name == "Hutt (Nal Hutta)"
 
 
-class KebabEnum(AutoNameEnum, KebabCaseMixin):
+class KebabEnum(Enumatic, KebabCaseMixin):
     jawa = auto()
     esh_kha = auto()
     gu_vandi = auto()
 
 
-class KebabAutoDocEnum(AutoNameEnum, KebabCaseMixin):
+class KebabAutoDocEnum(Enumatic, KebabCaseMixin):
     jawa = autodoc(description="A small, rodent-like alien from Tatooine", display_name="Jawa (Tatooine)")
     esh_kha = autodoc(description="An ancient, war-like alien with mysterious origins", display_name="Esh-kha (Unknown)")
     gu_vandi = autodoc(description="An obscure, peaceful alien from Praven Prime", display_name="Gu-vandi (Praen Prime)")

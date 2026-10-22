@@ -1,12 +1,18 @@
-from auto_name_enum.base import AutoNameEnum, auto, autodoc
-from auto_name_enum.mixins import KebabCaseMixin, LowerCaseMixin, TitleCaseMixin
+from enumatic import Enumatic, KebabCaseMixin, LowerCaseMixin, TitleCaseMixin, auto, autodoc
 
+from auto_name_enum.deprecated import warn_legacy
+
+AutoNameEnum = Enumatic
+
+
+warn_legacy()
 
 __all__ = (
-    "auto",
-    "autodoc",
     "AutoNameEnum",
+    "Enumatic",
     "KebabCaseMixin",
     "LowerCaseMixin",
     "TitleCaseMixin",
+    "auto",
+    "autodoc",
 )

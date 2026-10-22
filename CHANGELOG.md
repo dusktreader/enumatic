@@ -2,14 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/)
-and this project adheres to [Semantic Versioning](http://semver.org/).
+The format is based on [Keep a Changelog](http://keepachangelog.com/) and
+this project adheres to [Semantic Versioning](http://semver.org/).
+
+
+## v5.0.0 - 2026-10-21
+
+- Renamed the distribution and primary import package to `enumatic`
+- Renamed `AutoNameEnum` to `Enumatic`
+- Kept `AutoNameEnum` and the `auto_name_enum` import package as deprecated compatibility aliases
+- Added `StrEnum` comparison and migration guidance to the README
+- Updated documentation and examples for the new project name
 
 
 ## v4.2.0 - 2026-07-31
 
 - Added `KebabCaseMixin` to convert snake_case member names to kebab-case values
-- Exported `KebabCaseMixin` from the top-level `auto_name_enum` package
+- Exported `KebabCaseMixin` from the top-level package
 - Added tests for `KebabCaseMixin` with both `auto()` and `autodoc()`
 
 
